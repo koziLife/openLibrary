@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -13,9 +14,9 @@ public class BookServiceImpl  implements BookService{
     private static List<Book> books = new ArrayList<>();
 
     static {
-        Book book1 = new Book("1", "Java", "Meryem");
-        Book book2 = new Book("2", "C#", "Savas");
-        Book book3 = new Book("3", "Spring", "Meryem");
+        Book book1 = new Book(1,"473ASD","Java", "Meryem");
+        Book book2 = new Book(2, "7436R", "C#", "Savas");
+        Book book3 = new Book(3, "8847SD", "Spring", "Meryem");
 
         books.add(book1);
         books.add(book2);
@@ -27,13 +28,8 @@ public class BookServiceImpl  implements BookService{
     }
 
     @Override
-    public Book getBookByIsbn(String isbn) {
-        for(Book book: books){
-            if(book.getIsbn().equals(isbn)){
-                return book;
-            }
-        }
-        return null;
+    public Optional<Book> getBookById(int id) {
+        return books.stream().filter(book -> book.getId() == id).findFirst();
     }
 
     @Override
@@ -41,28 +37,36 @@ public class BookServiceImpl  implements BookService{
         Random random = new Random();
         int nextId = random.nextInt() +10;
 
-        book.setIsbn(nextId+"isbn");
+        book.setId(nextId);
         books.add(book);
         return book;
     }
 
     @Override
-    public void updateBook(Book book) {
-        for(Book oldBook: books){
-            if(oldBook.getIsbn() == book.getIsbn()){
-                oldBook.setAuthor(book.getAuthor());
-                oldBook.setTitle(book.getTitle());
-            }
-        }
-
+    public void updateBook(Book newBook) {
+        books
+                .stream()
+                .filter(b -> b.getId() == newBook.getId())
+                .map(book -> {
+                    book.setIsbn(newBook.getIsbn());
+                    book.setAuthor(newBook.getAuthor());
+                    book.setTitle(newBook.getTitle());
+                    book.setDescription(newBook.getDescription());
+                    book.setEditionLanguage(newBook.getEditionLanguage());
+                    book.setEdition(newBook.getEdition());
+                    book.setFormat(newBook.getFormat());
+                    book.setNumberOfPage(newBook.getNumberOfPage());
+                    book.setPublishedDate(newBook.getPublishedDate());
+                    book.setPublisher(newBook.getPublisher());
+                    return book;
+                });
     }
 
     @Override
-    public void deleteBook(String isbn) {
-        for(Book book: books){
-            if(book.getIsbn() == isbn){
-                books.remove(book);
-            }
-        }
+    public void deleteBook(int id) {
+        books
+                .stream()
+                .filter(book -> book.getId() == id)
+                .map(book -> books.remove(book));
     }
 }

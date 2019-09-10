@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class Book {
 
+    private int id;
+    private String isbn;
     private String title;
     private String author;
-    private String isbn;
     private String publisher;
     private Date publishedDate;
     private int numberOfPage;
@@ -15,10 +16,19 @@ public class Book {
     private String description;
     private String editionLanguage;
 
-    public Book(String isbn, String title, String author){
+    public Book(int id, String isbn, String title, String author){
+        this.id = id;
         this.isbn = isbn;
         this.title = title;
         this.author =author;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
