@@ -29,7 +29,10 @@ public class BookServiceImpl  implements BookService{
 
     @Override
     public Optional<Book> getBookById(int id) {
-        return books.stream().filter(book -> book.getId() == id).findFirst();
+        return books
+                .stream()
+                .filter(book -> book.getId() == id)
+                .findFirst();
     }
 
     @Override
